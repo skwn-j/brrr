@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.3",
     "@testing-library/user-event": "^7.1.2",
+    "bootstrap": "^4.4.1",
     "d3": "^5.14.2",
     "deck.gl": "^7.3.8",
     "react": "^16.12.0",
