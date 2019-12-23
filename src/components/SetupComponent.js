@@ -5,53 +5,55 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Navbar from 'react-bootstrap/Navbar';
+import Button from 'react-bootstrap/Button';
 
+//
 
-const StationDataReceiver = () => {
-    return (
-        <Container>
-            <Navbar expand="sm" variant="light" bg="light" style={{ position: 'relative', height: 20  }}>
-                <Navbar.Brand href="#"> Station Data </Navbar.Brand>
-            </Navbar>
-            <input type='file' name='Stations' onChange={e => console.log(e.target.files[0])}></input>
-        </Container>
-    )
-}
-
-const AlgorithmDataReceiver = () => {
-    return (
-        <Container>
-            <input type='file' name='Inventory' onChange={e => console.log(e.target)}></input>
-            <input type='file' name='Demand' onChange={e => console.log(e.target)}></input>
-            <input type='file' name='Route' onChange={e => console.log(e.target)}></input>
-        </Container>
-    )
-}
+//components
+import AlgorithmList from '../setup/AlgorithmListComponent';
+import DataReciever from '../setup/DataRecieverComponent';
 
 
 class Setup extends Component {
 
+
+    uploadData = (newData) => {
+        console.log(newData)
+        let data = this.state.data;
+        data.push(newData);
+        this.setState(Object.assign({}, {
+            data: data
+        }))
+        console.log(this.state)
+    }
+
+
     constructor(props) {
         super(props);
+
+        this.state = {
+            data: []
+        }
     }
 
     render() {
         // console.log('navigation: render');
         return (
-            <Container>
+            <Container style={{ paddingLeft: 0 }}>
                 <Navbar bg="dark" variant="dark" fixed='top' style={{ position: 'relative', height: 40 }}>
                     <Navbar.Brand>
                         {' Setup '}
                     </Navbar.Brand>
                 </Navbar>
                 <Row>
-                    <StationDataReceiver></StationDataReceiver>
+                    <DataReciever
+                        uploadData={this.uploadData}
+                    ></DataReciever>
                 </Row>
                 <Row>
-                    Algorithm Data
-                </Row>
-                <Row>
-
+                    <AlgorithmList
+                        data={this.state.data}
+                    > </AlgorithmList>
                 </Row>
 
             </Container>

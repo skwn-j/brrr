@@ -14,7 +14,7 @@ class Comparison extends Component {
     render() {
         // console.log('navigation: render');
         return (
-            <Container>
+            <Container style={{paddingLeft: 0}}>
                 <Navbar bg="dark" variant="dark" fixed='top' style={{ position: 'relative', height: 40 }}>
 							<Navbar.Brand>
 								{' Comparison '}

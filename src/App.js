@@ -25,20 +25,20 @@ class App extends Component {
 				</Navbar>
 				<Row style={{ width: 1920 }} noGutters={true}>
 					<Col id='setup-wrapper' className='setup' 
-						md ={{span: 2}} style={{ padding: '0px', float: 'left' }}>
+						md ={{span: 2}}>
 						<Setup>
 
 						</Setup>
 					</Col>
 					<Col id='comparison-wrapper' className='comparison'
-						md ={{span: 5}}style={{ padding: '0px', float: 'left' }}>
+						md ={{span: 5}}>
 						<Comparison>
 
 						</Comparison>
 
 					</Col>
 					<Col id='analysis-wrapper' className='analysis' 
-						md ={{span: 5}}style={{ padding: '0px', float: 'left' }}>
+						md ={{span: 5}}>
 						<Analysis>
 
 						</Analysis>
