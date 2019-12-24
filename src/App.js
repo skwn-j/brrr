@@ -8,12 +8,41 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 //components
-import Setup from './components/SetupComponent';
-import Comparison from './components/ComparisonComponent';
-import Analysis from './components/AnalysisComponent';
+import Setup from './setup/SetupComponent';
+import Comparison from './comparison/ComparisonComponent';
+import Analysis from './analysis/AnalysisComponent';
 
 class App extends Component {
 
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			selectedData: []
+		}
+	}
+
+	selectStationData = (stationData) => {
+		this.setState(Object.assign({}, {
+			selectedStationData: stationData
+		}));
+
+		console.log(this.state.selectedStationData);
+	}
+
+	selectData = (newData) => {
+		let data = this.state.selectData;
+		data.push(newData);
+		this.setState(Object.assign({}, {
+			selectedData: newData
+		}));
+
+		console.log(this.selectedData);
+	}
+
+	removeData = (oldData) => {
+		const oldName = oldData[0]
+	}
 
 	render() {
 		return (
@@ -26,7 +55,10 @@ class App extends Component {
 				<Row style={{ width: 1920 }} noGutters={true}>
 					<Col id='setup-wrapper' className='setup' 
 						md ={{span: 2}}>
-						<Setup>
+						<Setup
+							selectStationData={this.selectStationData}
+							selectData={this.selectData}
+						>
 
 						</Setup>
 					</Col>

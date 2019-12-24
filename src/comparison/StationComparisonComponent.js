@@ -28,7 +28,7 @@ const algColorScale = (i) => {
 
 const t = d3.transition().duration(500);
 
-class StationalComparison extends Component {
+class StationComparison extends Component {
 
     initChart = () => {
         this.chart = d3.select(this.myRef).append('g')
@@ -176,4 +176,4 @@ class StationalComparison extends Component {
     }
 }
 
-export default StationalComparison;
+export default StationComparison;

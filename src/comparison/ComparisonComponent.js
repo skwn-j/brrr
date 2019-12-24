@@ -5,6 +5,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Navbar from 'react-bootstrap/Navbar';
+
+
+// components
+import TemproalComparison from './TemporalComparisonComponent';
+import StationComparison from './StationComparisonComponent';
+import RouteComparison from './RouteComparisonComponent';
+
 class Comparison extends Component {
 
     constructor(props) {
@@ -21,13 +28,13 @@ class Comparison extends Component {
 							</Navbar.Brand>
 						</Navbar>
                 <Row>
-                    Station Data
+                    <TemproalComparison></TemproalComparison>
                 </Row>
                 <Row>
-                    Algorithms
+                    <StationComparison></StationComparison>
                 </Row>
                 <Row>
-                    
+                    <RouteComparison></RouteComparison>
                 </Row>
 
             </Container>

@@ -10,14 +10,23 @@ import Button from 'react-bootstrap/Button';
 //
 
 //components
-import AlgorithmList from '../setup/AlgorithmListComponent';
-import DataReciever from '../setup/DataRecieverComponent';
+import AlgorithmList from './AlgorithmListComponent';
+import DataReciever from './DataRecieverComponent';
 
 
 class Setup extends Component {
 
 
-    uploadData = (newData) => {
+    uploadStationData = (newData) => {
+        this.setState(Object.assign({}, {
+            stationData: newData
+        }))
+        console.log(this.state)
+
+        this.props.selectStationData(newData);
+    }
+
+    uploadAlgorithmData = (newData) => {
         console.log(newData)
         let data = this.state.data;
         data.push(newData);
@@ -25,6 +34,8 @@ class Setup extends Component {
             data: data
         }))
         console.log(this.state)
+
+        this.props.selectData(newData)
     }
 
 
@@ -32,6 +43,7 @@ class Setup extends Component {
         super(props);
 
         this.state = {
+            stationData: undefined,
             data: []
         }
     }
@@ -47,7 +59,8 @@ class Setup extends Component {
                 </Navbar>
                 <Row>
                     <DataReciever
-                        uploadData={this.uploadData}
+                        uploadStationData={this.uploadStationData}
+                        uploadAlgorithmData={this.uploadAlgorithmData}
                     ></DataReciever>
                 </Row>
                 <Row>
