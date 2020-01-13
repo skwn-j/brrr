@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 // map interaction
 
-const svgHeight = 770;
-const svgWidth = 770;
+const svgHeight = 600;
+const svgWidth = 610;
 const margin = { left: 40, right: 10, top: 10, bottom: 20 }
 
 const height = svgHeight - margin.top - margin.bottom;
@@ -46,6 +46,30 @@ class StationComparison extends Component {
 
         this.xAxis.call(d3.axisBottom(this.xScale));
         this.yAxis.call(d3.axisLeft(this.yScale))
+    }
+
+    updateStationData = () => {
+
+    }
+
+    refreshChart = () => {
+        console.log('refresh')
+        // remove all
+        this.chart.selectAll('.box').remove()
+
+        // refresh axis
+        this.xDomain = []
+        this.yDomain = Object.keys(this.props.stationData);
+
+        this.xScale.domain(this.xDomain);
+        this.yScale.domain(this.yDomain);
+
+        this.xAxis.call(d3.axisBottom(this.xScale));
+        this.yAxis.call(d3.axisLeft(this.yScale))
+
+        this.xAxis.transition(t).call(d3.axisBottom(this.xScale));
+        this.yAxis.transition(t).call(d3.axisLeft(this.yScale)); 
+
     }
 
     updateChart = () => {
@@ -137,6 +161,8 @@ class StationComparison extends Component {
         this.xDomain = undefined
         this.yDomain = undefined
 
+        this.renderOps = 'nothing';
+
         this.initChart = this.initChart.bind(this);
         this.updateChart = this.updateChart.bind(this);
 
@@ -145,23 +171,26 @@ class StationComparison extends Component {
 
     componentDidMount() {
         this.initChart();
-
     }
     componentDidUpdate() {
-        this.createData()
-        this.updateChart();
+        if(this.renderOps === 'refresh') {
+            this.refreshChart();
+        }
+        else if(this.renderOps === 'update') {
+            this.createData();
+            this.updateChart();
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        console.log(nextProps.timeRange)
-        if (nextProps.timeRange !== undefined) {
-            if (nextProps.timeRange !== this.props.timeRange) {
-                return true;
-            }
-            if (nextProps.kpiData.length !== this.props.kpiData.length) {
-                return true;
-            }
+        //station data changed or refresh
+        if(this.props.stationData !== nextProps.stationData) {
+            this.renderOps = 'refresh';
+            return true;
         }
+        // new strategy added
+        
+        this.renderOps = 'nothing'
         return false;
     }
 

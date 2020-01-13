@@ -2,18 +2,15 @@
 import React, { Component } from 'react';
 // deck.gl
 import DeckGL from '@deck.gl/react';
-import { ScatterplotLayer, PathLayer } from '@deck.gl/layers'
+import { ScatterplotLayer } from '@deck.gl/layers'
 import { TripsLayer } from '@deck.gl/geo-layers';
 import { WebMercatorViewport } from '@deck.gl/core';
+
 import ReactMapGl from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css';
 // d3
 import * as d3 from 'd3';
 // custom layers
-import StationPlotLayer from '../layers/station-plot-layer';
-import DirectedLineLayer from '../layers/directed-line-layer';
-import view from '@deck.gl/core/dist/es5/views/view';
-
 // Constants 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibWluaW11cyIsImEiOiJjanVpMXQ5ZGMxNjQ4NGZwZzA5eXF5N3lsIn0.R_H6mD12p7_M0RcjKjSHnw';
 const INITIAL_VIEW_STATE = {
@@ -25,7 +22,7 @@ const INITIAL_VIEW_STATE = {
     bearing: 0
 };
 
-const width = 570;
+const width = 610;
 const height = 400;
 
 
@@ -48,13 +45,13 @@ class Map extends Component {
         //this._onViewStateChange = this._onViewStateChange.bind(this);
     }
     updateLayers = () => {
-        const { stationData, truckData } = this.props;
+        const { stationData } = this.props;
         //set focus
-        console.log(stationData);
         this.stationLayer = new ScatterplotLayer({
             id: 'stationLayer',
             data: Object.values(stationData),
             pickable: true,
+            filled: true,
             lineWidthScale: 10,
             radiusScale: 10,
             radiusMinPixels: 1,
@@ -62,9 +59,10 @@ class Map extends Component {
             getRadius: 3,
             getLineWidth: 0.5,
             getFillColor: d => {
-                return [0, 0, 0]
+                return [255, 0, 0]
             }
         });
+
         //const startTime = +Object.keys(truckData[0])[0]
         /*
         let tripsData = this.createTripsData(startTime);
@@ -148,23 +146,29 @@ class Map extends Component {
     }
 
     componentDidUpdate() {
-        this.updateLayers();
+        
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        
-        return true;
+        if(nextProps.stationData !== this.props.stationData) {
+            return true;
+        }
+
+        return false;
     }
 
     render() {
         
         const { viewState } = this.state;
-        const { controller = true, baseMap = true } = this.props;
-
+        const { controller = true, baseMap = true, stationData } = this.props;
+        if(stationData !== undefined) {
+            this.updateLayers();
+        }
+    
         return (
             <DeckGL
                 container={'map'}
-                layers={[this.truckLayer, this.stationLayer]} // ,this.arrowLayer]}
+                layers={[this.stationLayer]} // ,this.arrowLayer]}
                 width={width}
                 height={height}
                 initialViewState={viewState}

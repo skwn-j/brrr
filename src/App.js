@@ -8,8 +8,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 //components
-import Setup from './setup/SetupComponent';
-import Comparison from './comparison/ComparisonComponent';
+import Stations from './stations/StationsComponent';
+import Strategies from './strategies/StrategiesComponent';
 import Analysis from './analysis/AnalysisComponent';
 
 class App extends Component {
@@ -22,12 +22,10 @@ class App extends Component {
 		}
 	}
 
-	selectStationData = (stationData) => {
+	setStationData = (stationData) => {
 		this.setState(Object.assign({}, {
-			selectedStationData: stationData
+			stationData
 		}));
-
-		console.log(this.state.selectedStationData);
 	}
 
 	selectData = (newData) => {
@@ -53,27 +51,16 @@ class App extends Component {
 					</Navbar.Brand>
 				</Navbar>
 				<Row style={{ width: 1920 }} noGutters={true}>
-					<Col id='setup-wrapper' className='setup' 
-						md ={{span: 2}}>
-						<Setup
-							selectStationData={this.selectStationData}
-							selectData={this.selectData}
+					<Col id='stations-wrapper' className='stations' 
+						md ={{span: 4}}>
+						<Stations
+							setStationData={this.setStationData}
+							stationData={this.state.stationData}
 						>
-
-						</Setup>
+						</Stations>
 					</Col>
-					<Col id='comparison-wrapper' className='comparison'
-						md ={{span: 5}}>
-						<Comparison>
-
-						</Comparison>
-
-					</Col>
-					<Col id='analysis-wrapper' className='analysis' 
-						md ={{span: 5}}>
-						<Analysis>
-
-						</Analysis>
+					<Col id='comparisons-wrapper' className='comparisons' 
+						md ={{span: 4}}>
 					</Col>
 				</Row>
 			</>

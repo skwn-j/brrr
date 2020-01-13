@@ -9,10 +9,9 @@ import Navbar from 'react-bootstrap/Navbar';
 
 // components
 import TemproalComparison from './TemporalComparisonComponent';
-import StationComparison from './StationComparisonComponent';
 import RouteComparison from './RouteComparisonComponent';
 
-class Comparison extends Component {
+class Strategies extends Component {
 
     constructor(props) {
         super(props);
@@ -31,9 +30,6 @@ class Comparison extends Component {
                     <TemproalComparison></TemproalComparison>
                 </Row>
                 <Row>
-                    <StationComparison></StationComparison>
-                </Row>
-                <Row>
                     <RouteComparison></RouteComparison>
                 </Row>
 
@@ -43,4 +39,4 @@ class Comparison extends Component {
     }
 }
 
-export default Comparison;
+export default Strategies;
