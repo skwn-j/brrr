@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 // map interaction
 
-const svgHeight = 600;
-const svgWidth = 610;
+const svgHeight = 390;
+const svgWidth = 970;
 const margin = { left: 40, right: 10, top: 10, bottom: 20 }
 
 const height = svgHeight - margin.top - margin.bottom;

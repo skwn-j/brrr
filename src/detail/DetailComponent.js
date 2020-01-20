@@ -6,12 +6,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Navbar from 'react-bootstrap/Navbar';
 
-
 // components
-import TemproalComparison from './TemporalComparisonComponent';
-import RouteComparison from './RouteComparisonComponent';
-
-class Strategies extends Component {
+import Map from './MapComponent';
+class Detail extends Component {
 
     constructor(props) {
         super(props);
@@ -20,23 +17,17 @@ class Strategies extends Component {
     render() {
         // console.log('navigation: render');
         return (
-            <Container style={{paddingLeft: 0}}>
+            <Container style={{paddingLeft: 0, paddingRight: 0}}>
                 <Navbar bg="dark" variant="dark" fixed='top' style={{ position: 'relative', height: 40 }}>
-							<Navbar.Brand>
-								{' Comparison '}
+							<Navbar.Brand >
+								{' Detail '}
 							</Navbar.Brand>
 						</Navbar>
-                <Row>
-                    <TemproalComparison></TemproalComparison>
-                </Row>
-                <Row>
-                    <RouteComparison></RouteComparison>
-                </Row>
 
             </Container>
 
         )
     }
 }
-
-export default Strategies;
+ 
+export default Detail;

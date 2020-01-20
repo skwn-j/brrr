@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 // map interaction
 
-const svgHeight = 300;
-const svgWidth = 770;
+const svgHeight = 290;
+const svgWidth = 970;
 const margin = { left: 40, right: 10, top: 10, bottom: 20 }
 
 const height = svgHeight - margin.top - margin.bottom;
@@ -21,7 +21,7 @@ const translate = (x, y) => {
 
 const t = d3.transition().duration(500);
 
-class RouteComparison extends Component {
+class TemporalComparison extends Component {
 
     initChart = () => {
         this.chart = d3.select(this.myRef).append('g')
@@ -264,4 +264,4 @@ class RouteComparison extends Component {
     }
 }
 
-export default RouteComparison;
+export default TemporalComparison;

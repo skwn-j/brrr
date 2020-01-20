@@ -11,8 +11,7 @@ import Form from 'react-bootstrap/Form';
 
 //components
 import DataReciever from './DataRecieverComponent';
-import StationsComparison from './StationComparisonComponent';
-import Map from './MapComponent';
+import StationsComparison from '../comparison/StationComparisonComponent';
 
 class Setup extends Component {
 
@@ -109,19 +108,6 @@ class Setup extends Component {
                         {'Submit'}
                     </Button>
                 </Row>
-                <Row id='map' style={{ position: 'relative', height: 400, margin: 0 }}>
-                    <Map
-                        stationData={this.props.stationData}
-                        >
-                    </Map>
-                </Row>
-                <Row style={{ position: 'relative', height: 600, margin: 0 }}>
-                    <StationsComparison
-                        stationData={this.props.stationData}
-                    >
-                    </StationsComparison>
-                </Row>
-
             </Container>
 
         )
