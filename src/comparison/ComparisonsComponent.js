@@ -19,6 +19,7 @@ class Comparisons extends Component {
 
 	componentDidUpdate() {}
 	render() {
+		console.log(this.props.data);
 		// console.log('navigation: render');
 		return (
 			<Container style={{ paddingLeft: 0 }}>
@@ -32,8 +33,9 @@ class Comparisons extends Component {
 				</Navbar>
 
 				<TemproalComparison
-					stationData={this.props.stationData}
-					data={this.props.data}
+					kpiData={this.props.data.map(d => d[4])}
+					kpiDomain={'umd'}
+					accumulate={true}
 				></TemproalComparison>
                 
 			</Container>

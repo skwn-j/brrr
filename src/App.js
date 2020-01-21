@@ -25,10 +25,10 @@ const localA = [
 ];
 
 const localB = [
-	"dataA/ExpectedInventory_10271016.csv",
-	"dataA/PredictedPickupDemand_10271016.csv",
-	"dataA/PredictedReturnDemand_10271016.csv",
-	"dataA/TruckMovements_10271016.csv"
+	"dataB/ExpectedInventory_10271016.csv",
+	"dataB/PredictedPickupDemand_10271016.csv",
+	"dataB/PredictedReturnDemand_10271016.csv",
+	"dataB/TruckMovements_10271016.csv"
 ];
 
 /*
@@ -220,7 +220,8 @@ class App extends Component {
 		console.log(dataA);
 		const kpiData = createKpiData(this.state.stationData, dataA)
 		dataA.push(kpiData);
-		const newData = this.state.data.push(dataA);
+		let newData = this.state.data
+		newData.push(dataA);
 		this.setState(
 			Object.assign(
 				{},
@@ -252,7 +253,8 @@ class App extends Component {
 
 		const kpiData = createKpiData(this.state.stationData, dataB)
 		dataB.push(kpiData);
-		const newData = this.state.data.push(dataB);
+		let newData = this.state.data
+		newData.push(dataB);
 		this.setState(
 			Object.assign(
 				{},

@@ -21,6 +21,8 @@ const translate = (x, y) => {
 
 const t = d3.transition().duration(500);
 
+const kpiDomains = ['umd', 'zvt', 'fpt', 'trf']
+
 class TemporalComparison extends Component {
 
     initChart = () => {
@@ -52,25 +54,29 @@ class TemporalComparison extends Component {
         this.chart.selectAll('.kpiLines').remove();
         this.chart.selectAll('.kpiDots').remove();
 
-        this.xScale.domain(this.timeDomain);
-        this.yScale.domain(this.kpiDomain);
+        this.xScale.domain(this.xDomain);
+        this.yScale.domain(this.yDomain);
         this.xAxis.transition(t).call(d3.axisBottom(this.xScale));
         this.yAxis.transition(t).call(d3.axisLeft(this.yScale));
 
 
 
         const line = d3.line()
-            .x(d => this.xScale(d[0])) // set the x values for the line generator
+            .x(d => {
+                return this.xScale(d[0])
+            }) // set the x values for the line generator
             .y(d => this.yScale(d[1])) // set the y values for the line generator 
 
-
+        console.log(this.data);
         this.chart.selectAll('.kpiLines')
-            .data(this.kpiData)
+            .data(this.data)
             .enter()
             .append('g')
             .attr('class', 'kpiLines')
             .append("path")
-            .datum(d => d) // 10. Binds data to the line 
+            .datum(d => {
+                return d;
+            }) // 10. Binds data to the line 
             .attr("class", "line") // Assign a class for styling 
             .attr("d", line) // 11. Calls the line generator 
             .style('fill', 'none')
@@ -84,7 +90,7 @@ class TemporalComparison extends Component {
 
         // 12. Appends a circle for each datapoint 
         this.chart.selectAll(".kpiDots")
-            .data(this.kpiData)
+            .data(this.data)
             .enter()
             .append('g')
             .attr('class', 'kpiDots')
@@ -98,15 +104,16 @@ class TemporalComparison extends Component {
             .attr("r", 3);
 
         this.coverage = this.xScale.range();
-        this.interval = (this.coverage[1] - this.coverage[0]) / (Math.max(this.kpiData[0].length, this.kpiData[1].length) - 1);
-
+        //this.interval = (this.coverage[1] - this.coverage[0]) / (Math.max(this.kpiData[0].length, this.kpiData[1].length) - 1);
+        /*
         this.chart.append('g')
             .attr('class', 'brush')
             .style('opacity', 0.6)
             .call(this.brush)
             .call(this.brush.move, this.coverage);
+            */
     }
-
+    /*
     brushed = () => {
         // selection event
         if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
@@ -138,17 +145,15 @@ class TemporalComparison extends Component {
             this.chart.select('.brush').call(this.brush.move, rounded)
         }
     }
-
+    */
     constructor(props) {
         super(props);
         this.myRef = React.createRef();
 
         //initialization
-        this.algA = undefined;
-        this.algB = undefined;
-        this.timeDomain = undefined;
-        this.kpiData = [];
-        this.kpiDomain = undefined
+        this.xDomain = undefined;
+        this.yDomain = undefined;
+        this.data = []
     }
     componentDidMount() {
         this.initChart();
@@ -160,99 +165,68 @@ class TemporalComparison extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        console.log(nextProps.data)
-        if(nextProps.data.length !== this.props.data.length) {
+        if(nextProps.kpiData.length !== this.props.kpiData.length) {
             console.log('no')
             return true;
         }
-        if(nextProps.kpi !== this.props.kpi) {
+        if(nextProps.kpiDomain !== this.props.kpiDomain) {
             return true;
         }
-        if(nextProps.diff !== this.props.diff) {
+        if(nextProps.accumulate !== this.props.accumulate) {
             return true;
         }
         return false;
     }
 
     createData() {
-        const { data, kpi, diff } = this.props;
-        this.timeDomain = undefined
-        this.kpiDomain = undefined
-        if (data.length !== 0) {
-            if(diff) {
-                const newData = data.map(alg => {
+        const { kpiData, kpiDomain, accumulate} = this.props;
+
+        console.log(kpiData);
+
+        if (kpiData.length !== 0) {
+            if(accumulate) {
+                const newData = kpiData.map(alg => {
                     let algData = [];
                     let h = 0;
                     alg.forEach(d => {
-                        if (kpi === 'umd') {
+                        if (kpiDomain === 'umd') {
                             h = d[1].reduce((acc, curr) => curr[1]['umd'] + acc, 0);
                             
                         }
                         else {
-                            h = d[1].filter(curr => curr[1][kpi] === true).length;
+                            h = d[1].filter(curr => curr[1][kpiDomain] === true).length;
                         }
                         algData.push([d[0], h])
                     })
-                    if(this.timeDomain === undefined) {
-                        // initial data
-                        this.timeDomain = d3.extent(algData.map(d => d[0]))
-                    }
-                    else {
-                        const newTimeDomain = d3.extent(algData.map(d => d[0]))
-                        this.timeDomain = [Math.min(this.timeDomain[0], newTimeDomain[0]), Math.max(this.timeDomain[1], newTimeDomain[1])]
-                    }
-                    
-                    if(this.kpiDomain === undefined) {
-                        // initial data
-                        this.kpiDomain = [0, d3.max(algData.map(d => d[1])) + 1];
-                    }
-                    else {
-                        const newKpiDomain = [0, Math.max(this.kpiDomain[1], d3.max(algData.map(d => d[1])) + 1)]
-                        this.kpiDomain = [Math.min(this.kpiDomain[0], newKpiDomain[0]), Math.max(this.kpiDomain[1], newKpiDomain[1])]
-                    }
                     return algData;
                 })
-                this.kpiData = newData;
+                this.data = newData;
             }
             else {
-                const newData = data.map(alg => {
+                const newData = kpiData.map(alg => {
                     let algData = [];
                     let h = 0;
                     alg.forEach(d => {
-                        if (kpi === 'umd') {
-                            h += d[1].reduce((acc, curr) => curr[1]['umd'] + acc, 0);
+                        if (kpiDomain === 'umd') {
+                            h = d[1].reduce((acc, curr) => curr[1]['umd'] + acc, 0);
                             
                         }
                         else {
-                            h += d[1].filter(curr => curr[1][kpi] === true).length;
+                            h = d[1].filter(curr => curr[1][kpiDomain] === true).length;
                         }
                         algData.push([d[0], h])
                     })
-                    if(this.timeDomain === undefined) {
-                        // initial data
-                        this.timeDomain = d3.extent(algData.map(d => d[0]))
-                    }
-                    else {
-                        const newTimeDomain = d3.extent(algData.map(d => d[0]))
-                        this.timeDomain = [Math.min(this.timeDomain[0], newTimeDomain[0]), Math.max(this.timeDomain[1], newTimeDomain[1])]
-                    }
-                    
-                    if(this.kpiDomain === undefined) {
-                        // initial data
-                        this.kpiDomain = [0, d3.max(algData.map(d => d[1])) + 1];
-                    }
-                    else {
-                        const newKpiDomain = [0, Math.max(this.kpiDomain[1], d3.max(algData.map(d => d[1])) + 1)]
-                        this.kpiDomain = [Math.min(this.kpiDomain[0], newKpiDomain[0]), Math.max(this.kpiDomain[1], newKpiDomain[1])]
-                    }
                     return algData;
                 })
-                this.kpiData = newData;
+                this.data = newData;
             }
-            
         }
         
+        this.xDomain = d3.extent(this.data[0].map(d => d[0]));
+        this.yDomain = [0, d3.max(this.data.map(d => d3.max(d.map(dd => dd[1]))))]
     }
+
+
     render() {
         return (
             <svg id='status-truck'
