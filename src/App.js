@@ -34,6 +34,33 @@ const localB = [
 /*
 	From Data Recevier component. to be removed
 */
+const haversine = ([lng1, lat1], [lng2, lat2]) => {
+    // Math lib function names
+    const [pi, asin, sin, cos, sqrt, pow, round] = [
+        'PI', 'asin', 'sin', 'cos', 'sqrt', 'pow', 'round'
+    ]
+        .map(k => Math[k]),
+
+        // degrees as radians
+        [rlat1, rlat2, rlon1, rlon2] = [lat1, lat2, lng2, lng2]
+            .map(x => x / 180 * pi),
+
+        dLat = rlat2 - rlat1,
+        dLon = rlon2 - rlon1,
+        radius = 6372.8; // km
+
+    // km
+    return round(
+        radius * 2 * asin(
+            sqrt(
+                pow(sin(dLat / 2), 2) +
+                pow(sin(dLon / 2), 2) *
+                cos(rlat1) * cos(rlat2)
+            )
+        ) * 100
+    ) / 100;
+};
+
 const createKpiData = (stationData, data) => {
 	const [ inventoryData, pickupDemandData, returnDemandData, routeData ] = data;
     let kpiData = [];
@@ -120,12 +147,13 @@ const parseCSV = csv => {
 	} else if (head[0] === "Truck") {
 		// truck movement
 		let prevLoad = 0;
+		let obj = {}
 		for (let i in body) {
 			const [truck, load, fromTime, fromSt, toTime, toSt] = body[i];
-			if (!result.hasOwnProperty(truck)) {
-				result[truck] = [];
+			if (!obj.hasOwnProperty(truck)) {
+				obj[truck] = [];
 			}
-			result[truck].push({
+			obj[truck].push({
 				station: fromSt,
 				time: Date.parse(fromTime),
 				in: prevLoad,
@@ -135,7 +163,7 @@ const parseCSV = csv => {
 			prevLoad = +load;
 
 			if (i === body.length - 1) {
-				result[truck].push({
+				obj[truck].push({
 					station: toSt,
 					time: Date.parse(toTime),
 					in: +load,
@@ -144,6 +172,9 @@ const parseCSV = csv => {
 				});
 			}
 		}
+		result = Object.values(obj);
+		console.log(result);
+
 	} else {
 		// station
 		for (let row of body) {
@@ -169,6 +200,7 @@ class App extends Component {
 
 		this.state = {
 			stationData: undefined,
+			distanceMatrix: undefined,
 			data: []
 		};
 	}
@@ -188,12 +220,22 @@ class App extends Component {
 			});
 
 		const stationData = parseCSV(arr);
+
+		let distanceMatrix = {};
+		Object.values(stationData).forEach(st1 => {
+			distanceMatrix[st1.id] = {}
+			Object.values(stationData).forEach(st2 =>  {
+				const dist = haversine(st1.coords, st2.coords)
+				distanceMatrix[st1.id][st2.id] = dist;
+			})
+		})
 		console.log(stationData);
 		this.setState(
 			Object.assign(
 				{},
 				{
-					stationData
+					stationData,
+					distanceMatrix
 				}
 			)
 		);
@@ -336,6 +378,7 @@ class App extends Component {
 						<Comparisons
 							stationData={this.state.stationData}
 							data={this.state.data}
+							distanceMatrix={this.state.distanceMatrix}
 						></Comparisons>
 					</Col>
 					<Col id="details-wrapper" md={{ span: 4.5 }}>

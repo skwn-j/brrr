@@ -17,9 +17,8 @@ class Comparisons extends Component {
 		super(props);
 	}
 
-	componentDidUpdate() {}
+	componentDidUpdate() { }
 	render() {
-		console.log(this.props.data);
 		// console.log('navigation: render');
 		return (
 			<Container style={{ paddingLeft: 0 }}>
@@ -37,7 +36,12 @@ class Comparisons extends Component {
 					kpiDomain={'umd'}
 					accumulate={true}
 				></TemproalComparison>
-                
+				<RouteComparison
+					stationData={this.props.stationData}
+					routeData={this.props.data.map(d => d[3])}
+					distanceMatrix={this.props.distanceMatrix}
+				></RouteComparison>
+
 			</Container>
 		);
 	}
@@ -47,10 +51,7 @@ export default Comparisons;
 
 
 /*
-				<RouteComparison
-					stationData={this.props.stationData}
-					data={this.props.data}
-				></RouteComparison>
+
 
 				<StationComparison
 					stationData={this.props.stationData}

@@ -67,7 +67,6 @@ class TemporalComparison extends Component {
             }) // set the x values for the line generator
             .y(d => this.yScale(d[1])) // set the y values for the line generator 
 
-        console.log(this.data);
         this.chart.selectAll('.kpiLines')
             .data(this.data)
             .enter()
@@ -166,7 +165,6 @@ class TemporalComparison extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if(nextProps.kpiData.length !== this.props.kpiData.length) {
-            console.log('no')
             return true;
         }
         if(nextProps.kpiDomain !== this.props.kpiDomain) {
@@ -180,8 +178,6 @@ class TemporalComparison extends Component {
 
     createData() {
         const { kpiData, kpiDomain, accumulate} = this.props;
-
-        console.log(kpiData);
 
         if (kpiData.length !== 0) {
             if(accumulate) {
